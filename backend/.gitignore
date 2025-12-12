@@ -1,0 +1,82 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.pickle
+*.db
+.env
+env/
+venv/
+.venv/
+ENV/
+
+# -----------------------------
+# FastAPI / Uvicorn
+# -----------------------------
+*.log
+logs/
+*.sqlite3
+
+# -----------------------------
+# Build / Cache
+# -----------------------------
+dist/
+build/
+*.egg-info/
+.cache/
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# -----------------------------
+# Output generated files
+# -----------------------------
+outputs/
+exports/
+temp/
+tmp/
+
+# -----------------------------
+# LaTeX / PDF related
+# -----------------------------
+*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.gz
+
+# -----------------------------
+# OS Files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# IDE / Editor
+# -----------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------------
+# Secrets / Keys / Configs
+# -----------------------------
+.env
+*.secret
+*.key
+config.json
+secrets.json
+
+# -----------------------------
+# Render Deployment
+# -----------------------------
+render.yaml
