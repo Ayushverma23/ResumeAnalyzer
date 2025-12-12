@@ -7,6 +7,7 @@ import { Card } from "@/components/atoms/Card"
 import { UploadZone } from "@/components/molecules/UploadZone"
 import { ModelSelector } from "@/components/molecules/ModelSelector"
 import { LatexEditor } from "@/components/molecules/LatexEditor"
+import { APIService } from "@/services/api"
 
 export default function Dashboard() {
     const [step, setStep] = React.useState<1 | 2 | 3>(1)
@@ -16,20 +17,34 @@ export default function Dashboard() {
     const [isAnalyzing, setIsAnalyzing] = React.useState(false)
     const [result, setResult] = React.useState<any>(null)
 
-    // Mock Analysis for visual testing (Real integration in Step 18)
+    // Real API Integration
     const handleAnalyze = async () => {
         if (!file || !jobDescription) return
 
         setIsAnalyzing(true)
-        setTimeout(() => {
-            setIsAnalyzing(false)
-            setStep(2)
+        try {
+            // Step 1: Analyze
+            const analysisResult = await APIService.analyzeResume(file, jobDescription, selectedModel)
+
+            // Step 2: Generate
+            const generationResult = await APIService.generateResume(
+                analysisResult.raw_text,
+                jobDescription,
+                analysisResult,
+                selectedModel
+            )
+
             setResult({
-                score: 78,
-                summary: "Good match but missing Cloud keywords.",
-                generated_latex: "% This is a mock LaTeX resume.\n\\documentclass{article}\n\\begin{document}\nHello World\n\\end{document}"
+                score: analysisResult.score,
+                summary: analysisResult.summary,
+                generated_latex: generationResult.latex_code
             })
-        }, 2000)
+            setStep(2)
+        } catch (error) {
+            alert("Error during analysis: " + (error as Error).message)
+        } finally {
+            setIsAnalyzing(false)
+        }
     }
 
     return (
