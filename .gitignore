@@ -1,0 +1,15 @@
+# Backend
+backend/.env
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.pytest_cache/
+
+# Frontend (standard files are already in frontend/.gitignore)
+frontend/.next/
+frontend/node_modules/
+frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
