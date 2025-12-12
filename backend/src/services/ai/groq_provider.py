@@ -1,6 +1,6 @@
 from groq import Groq
-from backend.src.core.config import settings
-from backend.src.services.ai.base import LLMProvider
+from src.core.config import settings
+from src.services.ai.base import LLMProvider
 
 class GroqProvider(LLMProvider):
     def __init__(self):

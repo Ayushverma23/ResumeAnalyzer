@@ -1,7 +1,7 @@
 import json
 import re
-from backend.src.services.ai.factory import AIFactory
-from backend.src.services.resume.prompts import AIPrompts
+from src.services.ai.factory import AIFactory
+from src.services.resume.prompts import AIPrompts
 
 class ResumeAnalyzer:
     @staticmethod

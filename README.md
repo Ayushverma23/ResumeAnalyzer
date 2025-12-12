@@ -44,9 +44,8 @@ ResumeProject/
 ### 1. Backend Setup
 
 ```bash
-cd backend
 # Install dependencies
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 # (Manually installed packages listed below if requirements.txt is missing)
 pip install fastapi uvicorn python-multipart google-generativeai pypdf python-dotenv groq huggingface_hub requests
 
@@ -56,8 +55,8 @@ pip install fastapi uvicorn python-multipart google-generativeai pypdf python-do
 # GROQ_API_KEY=...
 # HF_TOKEN=...
 
-# Run Server
-python -m uvicorn main:app --reload
+# Run Server (FROM ROOT DIRECTORY)
+python -m uvicorn backend.main:app --reload
 ```
 
 Server will start at `http://localhost:8000`.

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from backend.src.services.resume.parser import ResumeParser
-from backend.src.services.resume.analyzer import ResumeAnalyzer
-from backend.src.services.resume.generator import ResumeGenerator
-from backend.src.models.schemas import AnalysisResponse, GenerateRequest, GenerateResponse
+from src.services.resume.parser import ResumeParser
+from src.services.resume.analyzer import ResumeAnalyzer
+from src.services.resume.generator import ResumeGenerator
+from src.models.schemas import AnalysisResponse, GenerateRequest, GenerateResponse
 
 router = APIRouter()
 

@@ -1,7 +1,7 @@
-from backend.src.services.ai.base import LLMProvider
-from backend.src.services.ai.gemini_provider import GeminiProvider
-from backend.src.services.ai.groq_provider import GroqProvider
-from backend.src.services.ai.hf_provider import HFProvider
+from src.services.ai.base import LLMProvider
+from src.services.ai.gemini_provider import GeminiProvider
+from src.services.ai.groq_provider import GroqProvider
+from src.services.ai.hf_provider import HFProvider
 
 class AIFactory:
     @staticmethod
