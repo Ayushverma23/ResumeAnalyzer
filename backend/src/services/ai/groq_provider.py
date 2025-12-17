@@ -1,4 +1,4 @@
-from groq import Groq
+from groq import AsyncGroq
 from src.core.config import settings
 from src.services.ai.base import LLMProvider
 
@@ -7,9 +7,9 @@ class GroqProvider(LLMProvider):
         if not settings.GROQ_API_KEY:
             raise ValueError("GROQ_API_KEY is not set.")
         
-        self.client = Groq(api_key=settings.GROQ_API_KEY)
-        # Using Llama3-8b for speed and efficiency as default
-        self.model = "llama3-8b-8192"
+        self.client = AsyncGroq(api_key=settings.GROQ_API_KEY)
+        # Using Llama 3.1 8B Instant for speed
+        self.model = "llama-3.1-8b-instant"
 
     async def generate_response(self, prompt: str, system_instruction: str = None) -> str:
         try:
@@ -19,7 +19,7 @@ class GroqProvider(LLMProvider):
             
             messages.append({"role": "user", "content": prompt})
 
-            completion = self.client.chat.completions.create(
+            completion = await self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
                 temperature=0.7,
