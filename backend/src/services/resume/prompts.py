@@ -49,5 +49,56 @@ class AIPrompts:
         GENERATE LATEX NOW:
         """
 
+    @staticmethod
+    def score_resume_ats(latex_content: str, jd_text: str) -> str:
+        return f"""
+        Act as a strict ATS (Applicant Tracking System) and Senior Technical Recruiter.
+        
+        Evaluate the following LaTeX Resume content against the provided Job Description.
+        
+        JOB DESCRIPTION:
+        {jd_text}
+        
+        RESUME CONTENT (LATEX):
+        {latex_content}
+        
+        Task:
+        1. Calculate a match score (0-100) based on keyword overlap, skills match, and relevance.
+        2. Identify specific missing keywords (skills, tools, certifications) that are CRITICAL in the JD but missing in the resume.
+        3. Provide specific, actionable feedback on how to improve the resume to get a higher score.
+        
+        Output ONLY valid JSON with this structure:
+        {{
+            "score": <number>,
+            "missing_keywords": ["keyword1", "keyword2", ...],
+            "feedback": "Specific instructions for improvement..."
+        }}
+        """
+
+    @staticmethod
+    def refine_resume(current_latex: str, jd_text: str, feedback_json: str) -> str:
+        return f"""
+        Act as an Elite Professional Resume Writer.
+        
+        Your goal is to IMPROVE the following resume to achieve a 100% match with the Job Description, based on the specific feedback provided.
+        
+        PREVIOUS LATEX:
+        {current_latex}
+        
+        JOB DESCRIPTION:
+        {jd_text}
+        
+        FEEDBACK & MISSING KEYWORDS:
+        {feedback_json}
+        
+        INSTRUCTIONS:
+        1. Keep the existing LaTeX structure and formatting (unless specifically told to fix it).
+        2. Integrating the missing keywords naturally into the Experience, Skills, or Summary sections. Do not just list them; incorporate them into bullet points if possible.
+        3. Address all the feedback points.
+        4. Output the FULL, UPDATED LaTeX code.
+        
+        Output ONLY the LaTeX code.
+        """
+
 if __name__ == "__main__":
     print("AIPrompts Class Loaded.")

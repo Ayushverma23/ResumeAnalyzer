@@ -21,3 +21,5 @@ class GenerateRequest(BaseModel):
 
 class GenerateResponse(BaseModel):
     latex_code: str
+    final_score: Optional[int] = None
+    execution_log: Optional[List[Dict[str, Any]]] = None

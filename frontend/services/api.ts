@@ -11,6 +11,8 @@ export interface AnalysisResult {
 
 export interface GenerateResult {
     latex_code: string;
+    final_score?: number;
+    execution_log?: any[];
 }
 
 export const APIService = {

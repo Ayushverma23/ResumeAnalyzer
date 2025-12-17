@@ -23,9 +23,10 @@ export const useResumeAnalysis = () => {
             )
 
             setResult({
-                score: analysisResult.score,
+                score: generationResult.final_score || analysisResult.score,
                 summary: analysisResult.summary,
-                generated_latex: generationResult.latex_code
+                generated_latex: generationResult.latex_code,
+                logs: generationResult.execution_log // Optional: Store logs if we want to show them
             })
             setStep(2)
         } catch (error) {

@@ -32,15 +32,25 @@ async def analyze_resume(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+from src.services.resume.orchestrator import AgenticOrchestrator
+
 @router.post("/generate", response_model=GenerateResponse)
 async def generate_resume(request: GenerateRequest):
     try:
-        latex = await ResumeGenerator.generate_latex(
+        # Use Agentic Orchestrator for iterative improvement
+        result = await AgenticOrchestrator.optimize_resume(
             resume_text=request.resume_text,
             jd_text=request.jd_text,
-            analysis_json=request.analysis,
-            provider_name=request.provider
+            provider_name=request.provider,
+            initial_analysis=request.analysis
         )
-        return GenerateResponse(latex_code=latex)
+        
+        final_score_val = result.get("final_score", {}).get("score", 0)
+        
+        return GenerateResponse(
+            latex_code=result.get("final_latex", ""),
+            final_score=final_score_val,
+            execution_log=result.get("execution_log", [])
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
