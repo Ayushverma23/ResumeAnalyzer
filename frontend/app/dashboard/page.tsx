@@ -15,6 +15,8 @@ export default function Dashboard() {
         selectedModel,
         setSelectedModel,
         isAnalyzing,
+        streamStatus,
+        streamLogs,
         result,
         handleAnalyze
     } = useResumeAnalysis()
@@ -40,6 +42,8 @@ export default function Dashboard() {
                         model={selectedModel}
                         setModel={setSelectedModel}
                         isAnalyzing={isAnalyzing}
+                        streamStatus={streamStatus}
+                        streamLogs={streamLogs}
                         onAnalyze={handleAnalyze}
                     />
                     <OutputPanel step={step} result={result} />

@@ -54,3 +54,20 @@ async def generate_resume(request: GenerateRequest):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+import json
+from fastapi.responses import StreamingResponse
+
+@router.post("/generate_stream")
+async def generate_resume_stream(request: GenerateRequest):
+    async def event_generator():
+        async for update in AgenticOrchestrator.optimize_resume_stream(
+            resume_text=request.resume_text,
+            jd_text=request.jd_text,
+            provider_name=request.provider,
+            initial_analysis=request.analysis
+        ):
+            # Send as line-delimited JSON
+            yield json.dumps(update) + "\n"
+
+    return StreamingResponse(event_generator(), media_type="application/x-ndjson")
