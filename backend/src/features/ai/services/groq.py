@@ -1,14 +1,15 @@
+
 from groq import AsyncGroq
-from src.core.config import settings
-from src.services.ai.base import LLMProvider
+from src.core.config import get_settings
+from src.features.ai.services.base import LLMProvider
 
 class GroqProvider(LLMProvider):
     def __init__(self):
+        settings = get_settings()
         if not settings.GROQ_API_KEY:
             raise ValueError("GROQ_API_KEY is not set.")
         
         self.client = AsyncGroq(api_key=settings.GROQ_API_KEY)
-        # Using Llama 3.1 8B Instant for speed
         self.model = "llama-3.1-8b-instant"
 
     async def generate_response(self, prompt: str, system_instruction: str = None) -> str:
@@ -28,17 +29,3 @@ class GroqProvider(LLMProvider):
             return completion.choices[0].message.content
         except Exception as e:
             return f"Groq Error: {str(e)}"
-
-if __name__ == "__main__":
-    import asyncio
-    
-    async def test_groq():
-        print("Testing Groq Provider...")
-        try:
-            provider = GroqProvider()
-            response = await provider.generate_response("Say 'Hello from Groq!'")
-            print(f"Groq Response: {response}")
-        except Exception as e:
-            print(f"Test Failed: {e}")
-
-    asyncio.run(test_groq())

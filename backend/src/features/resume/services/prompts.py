@@ -1,3 +1,4 @@
+
 class AIPrompts:
     
     @staticmethod
@@ -99,6 +100,3 @@ class AIPrompts:
         
         Output ONLY the LaTeX code.
         """
-
-if __name__ == "__main__":
-    print("AIPrompts Class Loaded.")

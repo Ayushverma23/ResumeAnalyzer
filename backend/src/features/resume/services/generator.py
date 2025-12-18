@@ -1,16 +1,12 @@
+
 import re
-from src.services.ai.factory import AIFactory
-from src.services.resume.prompts import AIPrompts
+from src.features.ai.services.factory import AIFactory
+from src.features.resume.services.prompts import AIPrompts
 
 class ResumeGenerator:
     @staticmethod
     async def generate_latex(resume_text: str, jd_text: str, analysis_json: dict, provider_name: str = "gemini") -> str:
-        """
-        Generates a LaTeX resume based on analysis.
-        """
-        # Convert analysis dict back to string for prompt
         analysis_str = str(analysis_json)
-        
         prompt = AIPrompts.generate_latex_resume(resume_text, jd_text, analysis_str)
         
         provider = AIFactory.get_provider(provider_name)
@@ -20,11 +16,7 @@ class ResumeGenerator:
 
     @staticmethod
     def _clean_latex_string(text: str) -> str:
-        # Remove markdown code blocks if present
         text = re.sub(r"```latex\s*", "", text)
         text = re.sub(r"```tex\s*", "", text)
         text = re.sub(r"```", "", text)
         return text.strip()
-
-if __name__ == "__main__":
-    print("ResumeGenerator Service Ready.")

@@ -1,23 +1,26 @@
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.api.routes import router as api_router
+from src.core.config import get_settings
+from src.api.router import router as api_router
 
-app = FastAPI(title="Agentic Resume AI API")
+settings = get_settings()
 
-# Configure CORS
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all for now, restrict in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(api_router, prefix="/api")
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 async def root():
-    return {"message": "Agentic Resume AI Backend is Running"}
+    return {"message": "Agentic Resume AI Backend is Running", "version": settings.VERSION}
 
 if __name__ == "__main__":
     import uvicorn
