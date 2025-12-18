@@ -49,19 +49,22 @@ export const APIService = {
         jdText: string,
         analysis: AnalysisResult,
         provider: string,
-        onUpdate: (update: StreamUpdate) => void
+        onUpdate: (update: StreamUpdate) => void,
+        file?: File | null
     ): Promise<GenerateResult> => {
+        const formData = new FormData();
+        formData.append("resume_text", resumeText);
+        formData.append("jd_text", jdText);
+        formData.append("analysis", JSON.stringify(analysis));
+        formData.append("provider", provider);
+
+        if (file) {
+            formData.append("file", file);
+        }
+
         const response = await fetch(`${API_URL}/resume/generate_stream`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                resume_text: resumeText,
-                jd_text: jdText,
-                analysis: analysis,
-                provider: provider
-            }),
+            body: formData,
         });
 
         if (!response.ok) {

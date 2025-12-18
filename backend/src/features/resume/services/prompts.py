@@ -100,3 +100,33 @@ class AIPrompts:
         
         Output ONLY the LaTeX code.
         """
+
+    @staticmethod
+    def inject_content_into_template(resume_text: str, jd_text: str, analysis_json: str, layout_template: str) -> str:
+        return f"""
+        Act as a Professional Resume Writer.
+        
+        Your task is to rewrite the candidate's resume content to match the Job Description, and then INSERT that content into the provided LaTeX Template.
+        
+        You must PRESERVE the `layout_template` structure exactly. Do not change the margins, fonts, or section ordering.
+        ONLY replace the placeholder text (like {{SUMMARY}}, {{EXPERIENCE_SECTION}}, etc.) or the generic body text with the optimized content.
+        
+        Information Source:
+        RESUME: {resume_text}
+        
+        Target:
+        JOB DESCRIPTION: {jd_text}
+        
+        Guidance:
+        ANALYSIS: {analysis_json}
+        
+        Target Layout (LaTeX Template):
+        {layout_template}
+        
+        INSTRUCTIONS:
+        1. Write a High-Impact Summary focused on the JD.
+        2. Rewrite work experience bullets to show impact (STAR method), incorporating missing keywords from the Analysis.
+        3. Fill the Education and Skills sections.
+        4. OUTPUT the final, complete LaTeX code with the NEW content inserted into the TEMPLATE.
+        5. Ensure the code is valid LaTeX.
+        """

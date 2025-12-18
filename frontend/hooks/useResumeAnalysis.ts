@@ -24,6 +24,7 @@ export const useResumeAnalysis = () => {
             setStreamLogs(prev => [...prev, { message: "Initial Analysis Complete", data: analysisResult }])
 
             // Switch to Streaming Generation
+            // Switch to Streaming Generation
             const generationResult = await APIService.generateResumeStream(
                 analysisResult.raw_text,
                 jobDescription,
@@ -46,7 +47,8 @@ export const useResumeAnalysis = () => {
                             }])
                         }
                     }
-                }
+                },
+                file
             )
 
             setResult({

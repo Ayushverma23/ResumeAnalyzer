@@ -1,6 +1,6 @@
 
 import json
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
 from src.features.resume.schemas.resume import GenerateRequest, GenerateResponse
 from src.features.resume.services.orchestrator_flow import OrchestratorFlow
@@ -29,13 +29,26 @@ async def generate_resume_endpoint(request: GenerateRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/generate_stream")
-async def generate_resume_stream_endpoint(request: GenerateRequest):
+async def generate_resume_stream_endpoint(
+    file: UploadFile = File(None),
+    resume_text: str = Form(...),
+    jd_text: str = Form(...),
+    analysis: str = Form(None),
+    provider: str = Form("gemini")
+):
+    # Parse analysis JSON if provided
+    initial_analysis = json.loads(analysis) if analysis else None
+    
+    # Read PDF bytes if file is provided
+    pdf_bytes = await file.read() if file else None
+
     async def event_generator():
         async for update in OrchestratorStream.optimize_resume_stream(
-            resume_text=request.resume_text,
-            jd_text=request.jd_text,
-            provider_name=request.provider,
-            initial_analysis=request.analysis
+            resume_text=resume_text,
+            jd_text=jd_text,
+            provider_name=provider,
+            initial_analysis=initial_analysis,
+            pdf_bytes=pdf_bytes
         ):
             yield json.dumps(update) + "\n"
 

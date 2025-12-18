@@ -10,7 +10,7 @@ class GeminiProvider(LLMProvider):
             raise ValueError("GEMINI_API_KEY is not set.")
         
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        self.model = genai.GenerativeModel("gemini-1.5-flash")
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
 
     async def generate_response(self, prompt: str, system_instruction: str = None) -> str:
         try:

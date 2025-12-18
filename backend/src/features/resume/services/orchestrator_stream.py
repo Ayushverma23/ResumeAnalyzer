@@ -5,12 +5,22 @@ from src.features.resume.services.scorer import ATSScorer
 from src.features.resume.services.prompts import AIPrompts
 from src.features.ai.services.factory import AIFactory
 from src.features.resume.services.orchestrator_core import OrchestratorConfig
+from src.features.resume.services.layout_engine import LayoutEngine
 
 class OrchestratorStream:
     @staticmethod
-    async def optimize_resume_stream(resume_text: str, jd_text: str, provider_name: str = "gemini", initial_analysis: dict = None):
+    async def optimize_resume_stream(resume_text: str, jd_text: str, provider_name: str = "gemini", initial_analysis: dict = None, pdf_bytes: bytes = None):
         execution_log = []
         
+        layout_template = None
+        if pdf_bytes:
+             yield {"status": "analyzing", "message": "Extracting Visual Layout from PDF..."}
+             try:
+                 layout_template = await LayoutEngine.extract_layout_template(pdf_bytes)
+                 execution_log.append({"step": "layout", "status": "success"})
+             except Exception as e:
+                 execution_log.append({"step": "layout", "error": str(e)})
+
         if initial_analysis:
             yield {"status": "analyzing", "message": "Using cached analysis..."}
             analysis = initial_analysis
@@ -22,7 +32,7 @@ class OrchestratorStream:
         yield {"status": "analyzed", "data": analysis}
 
         yield {"status": "drafting", "message": "Generating first draft..."}
-        current_latex = await ResumeGenerator.generate_latex(resume_text, jd_text, analysis, provider_name)
+        current_latex = await ResumeGenerator.generate_latex(resume_text, jd_text, analysis, provider_name, layout_template)
         
         best_latex = current_latex
         best_score_data = {"score": 0}
