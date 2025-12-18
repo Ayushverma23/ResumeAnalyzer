@@ -22,7 +22,7 @@ export const APIService = {
         formData.append("jd", jobDescription);
         formData.append("provider", provider);
 
-        const response = await fetch(`${API_URL}/analyze`, {
+        const response = await fetch(`${API_URL}/resume/analyze`, {
             method: "POST",
             body: formData,
         });
@@ -36,7 +36,7 @@ export const APIService = {
     },
 
     generateResume: async (resumeText: string, jdText: string, analysis: any, provider: string): Promise<GenerateResult> => {
-        const response = await fetch(`${API_URL}/generate`, {
+        const response = await fetch(`${API_URL}/resume/generate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export const APIService = {
         provider: string,
         onUpdate: (update: any) => void
     ): Promise<GenerateResult> => {
-        const response = await fetch(`${API_URL}/generate_stream`, {
+        const response = await fetch(`${API_URL}/resume/generate_stream`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
