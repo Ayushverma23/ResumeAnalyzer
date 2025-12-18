@@ -1,6 +1,9 @@
 
 import os
 from functools import lru_cache
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Settings:
     PROJECT_NAME: str = "Agentic Resume AI"
