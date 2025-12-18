@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/atoms/Card"
 
 interface ResultCardsProps {

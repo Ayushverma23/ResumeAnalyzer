@@ -1,3 +1,4 @@
+
 import { Zap, ArrowRight } from "lucide-react"
 import { Button } from "@/components/atoms/Button"
 
@@ -16,13 +17,9 @@ export function AnalyzeButton({ isLoading, disabled, onClick }: AnalyzeButtonPro
             onClick={onClick}
         >
             {isLoading ? (
-                <>
-                    <Zap className="mr-2 h-4 w-4 animate-spin" /> Analyzing...
-                </>
+                <> <Zap className="mr-2 h-4 w-4 animate-spin" /> Analyzing... </>
             ) : (
-                <>
-                    Run Analysis Agent <ArrowRight className="ml-2 h-4 w-4" />
-                </>
+                <> Run Analysis Agent <ArrowRight className="ml-2 h-4 w-4" /> </>
             )}
         </Button>
     )

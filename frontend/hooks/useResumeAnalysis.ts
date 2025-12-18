@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { APIService } from "@/services/api"
+import { AnalysisResult, GenerateResult, StreamUpdate, LogItem } from "@/types"
 
 export const useResumeAnalysis = () => {
     const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -7,9 +8,9 @@ export const useResumeAnalysis = () => {
     const [jobDescription, setJobDescription] = useState("")
     const [selectedModel, setSelectedModel] = useState("gemini")
     const [isAnalyzing, setIsAnalyzing] = useState(false)
-    const [result, setResult] = useState<any>(null)
-    const [streamStatus, setStreamStatus] = useState({ status: "idle", message: "" })
-    const [streamLogs, setStreamLogs] = useState<any[]>([])
+    const [result, setResult] = useState<GenerateResult | null>(null)
+    const [streamStatus, setStreamStatus] = useState<StreamUpdate>({ status: "idle", message: "" })
+    const [streamLogs, setStreamLogs] = useState<LogItem[]>([])
 
     const handleAnalyze = async () => {
         if (!file || !jobDescription) return
@@ -28,24 +29,30 @@ export const useResumeAnalysis = () => {
                 jobDescription,
                 analysisResult,
                 selectedModel,
-                (update) => {
+                (update: StreamUpdate) => {
                     // Real-time update handler
                     if (update.status && update.status !== "complete") {
-                        setStreamStatus({ status: update.status, message: update.message || update.status })
+                        setStreamStatus({
+                            status: update.status,
+                            message: update.message || update.status
+                        })
 
                         // Add significant updates to log
                         if (update.score || update.feedback || update.message) {
-                            setStreamLogs(prev => [...prev, update])
+                            setStreamLogs(prev => [...prev, {
+                                message: update.message || update.status,
+                                data: update,
+                                score: !!update.score
+                            }])
                         }
                     }
                 }
             )
 
             setResult({
-                score: generationResult.final_score || analysisResult.score,
-                summary: analysisResult.summary,
-                generated_latex: generationResult.latex_code,
-                logs: generationResult.execution_log
+                final_score: generationResult.final_score || analysisResult.score,
+                latex_code: generationResult.latex_code,
+                execution_log: generationResult.execution_log
             })
             setStep(2)
         } catch (error) {

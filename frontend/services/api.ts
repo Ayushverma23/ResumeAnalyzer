@@ -1,19 +1,6 @@
+import { AnalysisResult, GenerateResult, StreamUpdate } from "@/types";
+
 const API_URL = "http://localhost:8000/api";
-
-export interface AnalysisResult {
-    score: number;
-    summary: string;
-    missing_keywords: string[];
-    strong_points: string[];
-    weak_points: string[];
-    raw_text: string;
-}
-
-export interface GenerateResult {
-    latex_code: string;
-    final_score?: number;
-    execution_log?: any[];
-}
 
 export const APIService = {
     analyzeResume: async (file: File, jobDescription: string, provider: string): Promise<AnalysisResult> => {
@@ -35,7 +22,7 @@ export const APIService = {
         return response.json();
     },
 
-    generateResume: async (resumeText: string, jdText: string, analysis: any, provider: string): Promise<GenerateResult> => {
+    generateResume: async (resumeText: string, jdText: string, analysis: AnalysisResult, provider: string): Promise<GenerateResult> => {
         const response = await fetch(`${API_URL}/resume/generate`, {
             method: "POST",
             headers: {
@@ -60,9 +47,9 @@ export const APIService = {
     generateResumeStream: async (
         resumeText: string,
         jdText: string,
-        analysis: any,
+        analysis: AnalysisResult,
         provider: string,
-        onUpdate: (update: any) => void
+        onUpdate: (update: StreamUpdate) => void
     ): Promise<GenerateResult> => {
         const response = await fetch(`${API_URL}/resume/generate_stream`, {
             method: "POST",
